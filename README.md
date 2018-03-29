@@ -1,2 +1,3 @@
 # simon-game
+
 React/Redux
