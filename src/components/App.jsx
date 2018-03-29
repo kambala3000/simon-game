@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
-import logo from '../static/images/logo.svg';
+import React from 'react';
+import styled from 'styled-components';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+// components
+import Header from './Header';
+import GameDisplay from './GameDisplay';
+
+const App = () => {
+  return (
+    <SCAppWrapper>
+      <Header />
+      <GameDisplay />
+    </SCAppWrapper>
+  );
+};
+
+const SCAppWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 export default App;
