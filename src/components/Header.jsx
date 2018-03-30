@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import styled from 'styled-components';
+import styled from 'styled-components';
 
+// components
 import Select from './Select';
 
 // store
-// import {} from '../store/actions';
+import { changeDifficulty } from '../store/actions';
 
 class Header extends Component {
   static propTypes = {
     difficulty: PropTypes.string.isRequired,
     colorsSequence: PropTypes.array.isRequired,
-    dispatch: PropTypes.func.isRequired
+    changeDifficulty: PropTypes.func.isRequired
   };
 
   handleSelect = value => {
@@ -20,7 +21,7 @@ class Header extends Component {
   };
 
   render() {
-    const { difficulty, colorsSequence } = this.props;
+    const { difficulty, colorsSequence, changeDifficulty } = this.props;
     const roundNumber = colorsSequence.length;
 
     const selectOptions = [
@@ -30,21 +31,53 @@ class Header extends Component {
     ];
 
     return (
-      <div>
-        <p>Simon the Game</p>
-        <p>Round: {roundNumber}</p>
-        <div>
+      <SCHeaderWrap>
+        <SCTitle>Simon the Game</SCTitle>
+        <SCRoundsCounter>Round: {roundNumber}</SCRoundsCounter>
+        <SCDifficultyWrap>
           <span>Difficulty:</span>
-          <Select options={selectOptions} onSelect={this.handleSelect} selected={difficulty} />
-        </div>
-      </div>
+          <Select
+            selected={difficulty}
+            options={selectOptions}
+            onSelect={this.handleSelect}
+            onItemClick={changeDifficulty}
+          />
+        </SCDifficultyWrap>
+      </SCHeaderWrap>
     );
   }
 }
+
+const SCHeaderWrap = styled.div`
+  padding: 20px 0 30px 0;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+`;
+
+const SCTitle = styled.h1`
+  font-size: 36px;
+  padding-bottom: 10px;
+`;
+
+const SCRoundsCounter = styled.p`
+  font-size: 24px;
+  padding-bottom: 15px;
+`;
+
+const SCDifficultyWrap = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  > span {
+    padding-right: 10px;
+  }
+`;
 
 const mapStateToProps = ({ difficulty, colorsSequence }) => ({
   difficulty,
   colorsSequence
 });
 
-export default connect(mapStateToProps, null)(Header);
+export default connect(mapStateToProps, { changeDifficulty })(Header);
