@@ -4,13 +4,39 @@ import styled from 'styled-components';
 
 class ColoredButton extends Component {
   static propTypes = {
-    bgColor: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    activeColor: PropTypes.string,
+    bgColor: PropTypes.string.isRequired,
+    pressedColor: PropTypes.string.isRequired
+  };
+
+  state = {
+    isClicked: false
+  };
+
+  handleMouseDown = () => {
+    this.setState({ isClicked: true });
+  };
+
+  handleMouseUp = () => {
+    this.setState({ isClicked: false });
   };
 
   render() {
-    const { bgColor } = this.props;
+    const { isClicked } = this.state;
+    const { type, activeColor, bgColor, pressedColor } = this.props;
+    const isActive = activeColor === type;
+    const isPressed = isActive || isClicked;
 
-    return <SCButton bgColor={bgColor} />;
+    return (
+      <SCButton
+        bgColor={bgColor}
+        pressedColor={pressedColor}
+        isPressed={isPressed}
+        onMouseDown={this.handleMouseDown}
+        onMouseUp={this.handleMouseUp}
+      />
+    );
   }
 }
 
@@ -19,7 +45,8 @@ const SCButton = styled.button`
   height: 300px;
   border: none;
   outline: none;
-  background-color: ${({ bgColor }) => bgColor};
+  background-color: ${({ bgColor, pressedColor, isPressed }) =>
+    isPressed ? pressedColor : bgColor};
   cursor: pointer;
   border: 1px solid #212121;
 `;
