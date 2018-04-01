@@ -18,7 +18,7 @@ export const DEFAULT_COLORS = [
   {
     type: 'yellow',
     bgColor: '#FFEB3B',
-    pressedColor: '#FFF176'
+    pressedColor: '#FFF59D'
   },
   {
     type: 'blue',

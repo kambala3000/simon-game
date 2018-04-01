@@ -11,7 +11,9 @@ import {
   turnGameOff,
   addColorToSequence,
   changePlayingStatus,
-  setActiveColor
+  setActiveColor,
+  failGame,
+  writeInputIndex
 } from '../store/actions';
 
 // constants
@@ -23,17 +25,31 @@ class GameDisplay extends Component {
     isSequenceFailed: PropTypes.bool.isRequired,
     difficulty: PropTypes.string.isRequired,
     activeColor: PropTypes.string,
+    isPlayingSequence: PropTypes.bool.isRequired,
+    userInputIndex: PropTypes.number,
     turnGameOff: PropTypes.func.isRequired,
     addColorToSequence: PropTypes.func.isRequired,
     changePlayingStatus: PropTypes.func.isRequired,
-    setActiveColor: PropTypes.func.isRequired
+    setActiveColor: PropTypes.func.isRequired,
+    failGame: PropTypes.func.isRequired,
+    writeInputIndex: PropTypes.func.isRequired
   };
+
+  timerId = null;
 
   handleGameStatus = () => {
     const { colorsSequence, isSequenceFailed, turnGameOff } = this.props;
     const isGameInProcess = colorsSequence.length > 0;
+    clearTimeout(this.timerId);
 
-    if (isGameInProcess || isSequenceFailed) {
+    if (isSequenceFailed) {
+      turnGameOff();
+      this.initRound();
+
+      return;
+    }
+
+    if (isGameInProcess) {
       turnGameOff();
     } else {
       this.initRound();
@@ -43,42 +59,31 @@ class GameDisplay extends Component {
   initRound = async () => {
     const { addColorToSequence } = this.props;
     await addColorToSequence(this.randomColor);
-    await addColorToSequence(this.randomColor);
     this.playSequence();
   };
 
   playSequence = async () => {
     const { colorsSequence, difficulty, changePlayingStatus, setActiveColor } = this.props;
-    console.log(colorsSequence);
+
     changePlayingStatus();
 
-    const sequencePromises = colorsSequence.map((color, index) => {
-      return new Promise((resolve, reject) => {
-        setTimeout(async () => {
-          setActiveColor(color);
+    for (const color of colorsSequence) {
+      await this.timeout(DIFFICULTY_LEVELS_TIMING[difficulty]);
+      setActiveColor(color);
 
-          // mb promise all
-          // const disableSoundPromise = () =>
-          //   new Promise((resolve, reject) => {
-          //     setTimeout(() => {
-          //       setActiveColor('');
-          //       resolve();
-          //     }, DIFFICULTY_LEVELS_TIMING[difficulty]);
-          //   });
+      await this.timeout(DIFFICULTY_LEVELS_TIMING[difficulty]);
+      setActiveColor('');
+    }
 
-          // await disableSoundPromise();
-
-          resolve();
-        }, ++index * DIFFICULTY_LEVELS_TIMING[difficulty]);
-      });
-    });
-
-    await Promise.all(sequencePromises);
-
-    setTimeout(() => {
-      changePlayingStatus();
-    }, DIFFICULTY_LEVELS_TIMING[difficulty]);
+    changePlayingStatus();
   };
+
+  timeout = ms =>
+    new Promise(resolve => {
+      this.timerId = setTimeout(() => {
+        resolve();
+      }, ms);
+    });
 
   get randomColor() {
     const colorsTypes = DEFAULT_COLORS.map(color => color.type);
@@ -97,7 +102,15 @@ class GameDisplay extends Component {
   }
 
   render() {
-    const { activeColor } = this.props;
+    const {
+      activeColor,
+      colorsSequence,
+      isPlayingSequence,
+      userInputIndex,
+      isSequenceFailed,
+      failGame,
+      writeInputIndex
+    } = this.props;
     const buttonTitle = this.buttonTitle;
 
     return (
@@ -110,6 +123,13 @@ class GameDisplay extends Component {
               bgColor={bgColor}
               pressedColor={pressedColor}
               activeColor={activeColor}
+              colorsSequence={colorsSequence}
+              isPlayingSequence={isPlayingSequence}
+              userInputIndex={userInputIndex}
+              isSequenceFailed={isSequenceFailed}
+              initRound={this.initRound}
+              failGame={failGame}
+              writeInputIndex={writeInputIndex}
             />
           ))}
         </SCDisplayWrap>
@@ -146,16 +166,27 @@ const SCStartButton = styled.button`
   cursor: pointer;
 `;
 
-const mapStateToProps = ({ colorsSequence, isSequenceFailed, difficulty, activeColor }) => ({
+const mapStateToProps = ({
   colorsSequence,
   isSequenceFailed,
   difficulty,
-  activeColor
+  activeColor,
+  isPlayingSequence,
+  userInputIndex
+}) => ({
+  colorsSequence,
+  isSequenceFailed,
+  difficulty,
+  activeColor,
+  isPlayingSequence,
+  userInputIndex
 });
 
 export default connect(mapStateToProps, {
   turnGameOff,
   addColorToSequence,
   changePlayingStatus,
-  setActiveColor
+  setActiveColor,
+  failGame,
+  writeInputIndex
 })(GameDisplay);

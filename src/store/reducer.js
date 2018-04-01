@@ -40,7 +40,12 @@ export default function(state = initialState, { type, payload }) {
     case FAIL_GAME:
       return { ...state, isSequenceFailed: true };
     case CHANGE_PLAYING_STATUS:
-      return { ...state, isPlayingSequence: !state.isPlayingSequence, activeColor: '' };
+      return {
+        ...state,
+        isPlayingSequence: !state.isPlayingSequence,
+        activeColor: '',
+        userInputIndex: 0
+      };
     case SET_ACTIVE_COLOR:
       return { ...state, activeColor: payload };
     default:
