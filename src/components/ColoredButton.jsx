@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+// utils
+import { playColorSound } from '../utils/methods';
+
 class ColoredButton extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
@@ -36,6 +39,7 @@ class ColoredButton extends Component {
     } = this.props;
 
     this.setState({ isClicked: false });
+    playColorSound(type);
 
     if (colorsSequence.length === 0) return;
 
@@ -48,6 +52,13 @@ class ColoredButton extends Component {
       return writeInputIndex(userInputIndex + 1);
     } else {
       return failGame();
+    }
+  };
+
+  handleMouseLeave = () => {
+    const { isClicked } = this.state;
+    if (isClicked) {
+      this.setState({ isClicked: false });
     }
   };
 
@@ -73,6 +84,7 @@ class ColoredButton extends Component {
         disabled={disableButton}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
+        onMouseLeave={this.handleMouseLeave}
       />
     );
   }
@@ -87,6 +99,7 @@ const SCButton = styled.button`
     isPressed ? pressedColor : bgColor};
   cursor: pointer;
   border: 1px solid #212121;
+  transition: background-color 0.1s linear;
 `;
 
 export default ColoredButton;

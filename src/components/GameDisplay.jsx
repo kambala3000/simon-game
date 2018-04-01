@@ -16,8 +16,9 @@ import {
   writeInputIndex
 } from '../store/actions';
 
-// constants
+// utils
 import { DEFAULT_COLORS, DIFFICULTY_LEVELS_TIMING } from '../utils/constants';
+import { playColorSound } from '../utils/methods';
 
 class GameDisplay extends Component {
   static propTypes = {
@@ -64,14 +65,16 @@ class GameDisplay extends Component {
 
   playSequence = async () => {
     const { colorsSequence, difficulty, changePlayingStatus, setActiveColor } = this.props;
+    const timeoutDuration = DIFFICULTY_LEVELS_TIMING[difficulty];
 
     changePlayingStatus();
 
     for (const color of colorsSequence) {
-      await this.timeout(DIFFICULTY_LEVELS_TIMING[difficulty]);
+      await this.timeout(timeoutDuration);
       setActiveColor(color);
+      playColorSound(color);
 
-      await this.timeout(DIFFICULTY_LEVELS_TIMING[difficulty]);
+      await this.timeout(timeoutDuration);
       setActiveColor('');
     }
 
