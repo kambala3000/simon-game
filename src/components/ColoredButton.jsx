@@ -16,8 +16,8 @@ class ColoredButton extends Component {
     userInputIndex: PropTypes.number,
     isSequenceFailed: PropTypes.bool.isRequired,
     initRound: PropTypes.func.isRequired,
-    failGame: PropTypes.func.isRequired,
-    writeInputIndex: PropTypes.func.isRequired
+    writeInputIndex: PropTypes.func.isRequired,
+    failGame: PropTypes.func.isRequired
   };
 
   state = {
@@ -34,8 +34,8 @@ class ColoredButton extends Component {
       colorsSequence,
       userInputIndex,
       initRound,
-      failGame,
-      writeInputIndex
+      writeInputIndex,
+      failGame
     } = this.props;
 
     this.setState({ isClicked: false });

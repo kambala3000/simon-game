@@ -8,17 +8,17 @@ import ColoredButton from './ColoredButton';
 
 // store
 import {
-  turnGameOff,
   addColorToSequence,
-  changePlayingStatus,
   setActiveColor,
+  changePlayingStatus,
+  writeInputIndex,
   failGame,
-  writeInputIndex
+  turnGameOff
 } from '../store/actions';
 
 // utils
 import { DEFAULT_COLORS, DIFFICULTY_LEVELS_TIMING } from '../utils/constants';
-import { playColorSound } from '../utils/methods';
+import { randomColor, playColorSound } from '../utils/methods';
 
 class GameDisplay extends Component {
   static propTypes = {
@@ -59,7 +59,8 @@ class GameDisplay extends Component {
 
   initRound = async () => {
     const { addColorToSequence } = this.props;
-    await addColorToSequence(this.randomColor);
+    const color = randomColor();
+    await addColorToSequence(color);
     this.playSequence();
   };
 
@@ -88,13 +89,6 @@ class GameDisplay extends Component {
       }, ms);
     });
 
-  get randomColor() {
-    const colorsTypes = DEFAULT_COLORS.map(color => color.type);
-    const randomIndex = Math.floor(Math.random() * colorsTypes.length);
-
-    return colorsTypes[randomIndex];
-  }
-
   get buttonTitle() {
     const { colorsSequence, isSequenceFailed } = this.props;
     const isGameInProcess = colorsSequence.length > 0;
@@ -111,8 +105,8 @@ class GameDisplay extends Component {
       isPlayingSequence,
       userInputIndex,
       isSequenceFailed,
-      failGame,
-      writeInputIndex
+      writeInputIndex,
+      failGame
     } = this.props;
     const buttonTitle = this.buttonTitle;
 
@@ -131,8 +125,8 @@ class GameDisplay extends Component {
               userInputIndex={userInputIndex}
               isSequenceFailed={isSequenceFailed}
               initRound={this.initRound}
-              failGame={failGame}
               writeInputIndex={writeInputIndex}
+              failGame={failGame}
             />
           ))}
         </SCDisplayWrap>
@@ -186,10 +180,10 @@ const mapStateToProps = ({
 });
 
 export default connect(mapStateToProps, {
-  turnGameOff,
   addColorToSequence,
-  changePlayingStatus,
   setActiveColor,
+  changePlayingStatus,
+  writeInputIndex,
   failGame,
-  writeInputIndex
+  turnGameOff
 })(GameDisplay);

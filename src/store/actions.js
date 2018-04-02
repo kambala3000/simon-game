@@ -1,11 +1,11 @@
 import {
   CHANGE_DIFFICULTY,
-  TURN_GAME_OFF,
   ADD_COLOR_TO_SEQUENCE,
+  SET_ACTIVE_COLOR,
+  CHANGE_PLAYING_STATUS,
   WRITE_INPUT_INDEX,
   FAIL_GAME,
-  CHANGE_PLAYING_STATUS,
-  SET_ACTIVE_COLOR
+  TURN_GAME_OFF
 } from './constants';
 
 export const changeDifficulty = difficultyType => ({
@@ -13,12 +13,13 @@ export const changeDifficulty = difficultyType => ({
   payload: difficultyType
 });
 
-export const turnGameOff = () => ({
-  type: TURN_GAME_OFF
-});
-
 export const addColorToSequence = color => ({
   type: ADD_COLOR_TO_SEQUENCE,
+  payload: color
+});
+
+export const setActiveColor = color => ({
+  type: SET_ACTIVE_COLOR,
   payload: color
 });
 
@@ -27,15 +28,14 @@ export const writeInputIndex = idx => ({
   payload: idx
 });
 
-export const failGame = () => ({
-  type: FAIL_GAME
-});
-
 export const changePlayingStatus = () => ({
   type: CHANGE_PLAYING_STATUS
 });
 
-export const setActiveColor = color => ({
-  type: SET_ACTIVE_COLOR,
-  payload: color
+export const failGame = () => ({
+  type: FAIL_GAME
+});
+
+export const turnGameOff = () => ({
+  type: TURN_GAME_OFF
 });

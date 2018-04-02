@@ -46,7 +46,6 @@ class Header extends Component {
     return (
       <SCHeaderWrap>
         <SCTitle>Simon the Game</SCTitle>
-        <SCRoundsCounter>Round: {roundNumber}</SCRoundsCounter>
         <SCDifficultyWrap>
           <span>Difficulty:</span>
           <Select
@@ -56,6 +55,9 @@ class Header extends Component {
             onItemClick={changeDifficulty}
           />
         </SCDifficultyWrap>
+        <SCRoundsCounter>
+          Round: <span>{roundNumber}</span>
+        </SCRoundsCounter>
         <SCStatusTitle>{statusTitle}</SCStatusTitle>
       </SCHeaderWrap>
     );
@@ -76,6 +78,9 @@ const SCTitle = styled.h1`
 const SCRoundsCounter = styled.p`
   font-size: 24px;
   padding-bottom: 15px;
+  > span {
+    color: #ff5722;
+  }
 `;
 
 const SCDifficultyWrap = styled.div`
