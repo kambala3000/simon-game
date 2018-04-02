@@ -108,7 +108,6 @@ class GameDisplay extends Component {
       writeInputIndex,
       failGame
     } = this.props;
-    const buttonTitle = this.buttonTitle;
 
     return (
       <SCAligner>
@@ -130,7 +129,7 @@ class GameDisplay extends Component {
             />
           ))}
         </SCDisplayWrap>
-        <SCStartButton onClick={this.handleGameStatus}>{buttonTitle}</SCStartButton>
+        <SCStartButton onClick={this.handleGameStatus}>{this.buttonTitle}</SCStartButton>
       </SCAligner>
     );
   }

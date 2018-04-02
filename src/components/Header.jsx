@@ -35,7 +35,6 @@ class Header extends Component {
   render() {
     const { difficulty, colorsSequence, changeDifficulty } = this.props;
     const roundNumber = colorsSequence.length;
-    const statusTitle = this.statusTitle;
 
     const selectOptions = [
       { label: 'Easy', value: 'easy' },
@@ -58,7 +57,7 @@ class Header extends Component {
         <SCRoundsCounter>
           Round: <span>{roundNumber}</span>
         </SCRoundsCounter>
-        <SCStatusTitle>{statusTitle}</SCStatusTitle>
+        <SCStatusTitle>{this.statusTitle}</SCStatusTitle>
       </SCHeaderWrap>
     );
   }
